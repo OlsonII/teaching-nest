@@ -10,7 +10,7 @@ describe('Bank account tests', () => {
 
   describe('Savings account', ()=>{
 
-    beforeAll(() => {
+    beforeEach(() => {
       bankAccount = new SavingAccount();
       bankAccount.number = '0000';
       bankAccount.city = 'Valledupar';
@@ -32,6 +32,21 @@ describe('Bank account tests', () => {
       newTransaction.value = 50000;
       bankAccount.consing(newTransaction);
       expect(bankAccount.balance).toBe(50000);
+    });
+
+    test('Consignación posterior a la inicial correcta', () => {
+
+      const newTransaccion: Transaction = new Transaction();
+      newTransaccion.city = "Valledupar";
+      newTransaccion.value = 50000;
+      bankAccount.consing(newTransaccion);
+      newTransaccion.city = "Valledupar";
+      newTransaccion.value = 20000;
+      bankAccount.remove(newTransaccion);
+      newTransaccion.city = "Valledupar";
+      newTransaccion.value = 49950;
+      bankAccount.consing(newTransaccion);
+      expect(bankAccount.balance).toBe(79950);
     });
 
   });
