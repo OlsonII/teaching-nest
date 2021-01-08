@@ -8,4 +8,3 @@ import { UnitOfWork } from "./base/unit.of.work";
   exports: [UnitOfWork]
 })
 export class InfrastructureModule{}
-//TODO: EXPLAIN MODULES
