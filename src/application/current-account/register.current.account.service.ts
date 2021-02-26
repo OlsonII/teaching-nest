@@ -2,6 +2,7 @@ import { IUnitOfWork } from "../../infrastructure/contracts/i.unit.of.work";
 import { BankAccount } from "../../domain/entity/bank.account";
 import { CurrentAccount } from "../../domain/entity/current.account";
 import { Transaction } from "../../domain/entity/transaction";
+import { CurrentAccountRepository } from "../../infrastructure/repositories/current.account.repository";
 
 export class RegisterCurrentAccountService{
 
@@ -11,7 +12,7 @@ export class RegisterCurrentAccountService{
 
     try{
 
-      const accountSearched: BankAccount = await this.unitOfWork.currentAccountRepository.findEntity(request.number);
+      const accountSearched: BankAccount = await this.unitOfWork.currentAccountRepository.findOne({where: {number: request.number}});
 
       if(accountSearched == undefined){
         const newAccount: BankAccount = new CurrentAccount();
@@ -19,15 +20,15 @@ export class RegisterCurrentAccountService{
         newAccount.ownerId = request.ownerId;
         newAccount.city = request.city;
         const firstTransaction: Transaction = new Transaction();
-        firstTransaction.value = request.firstConsingValue;
+        firstTransaction.value = parseInt(request.firstConsingValue.toString());
+        firstTransaction.city = request.city;
         newAccount.consing(firstTransaction);
 
         if(newAccount.balance > 0){
-          await this.unitOfWork.start();
           const savedAccount = await this.unitOfWork.currentAccountRepository.save(newAccount);
 
           if(savedAccount != undefined)
-            return new RegisterCurrentAccountResponse('Cuenta corriente numero' + savedAccount.number + 'ha sido creada satisfactoriamente');
+            return new RegisterCurrentAccountResponse('Cuenta corriente numero ' + savedAccount.number + ' ha sido creada satisfactoriamente');
         }
 
         return new RegisterCurrentAccountResponse('Consignacion inicial insuficiente. La consigancion inicial minima debe ser de $100.000 COP')

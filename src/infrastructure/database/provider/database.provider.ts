@@ -10,7 +10,7 @@ export const databaseProviders = [
       synchronize: true,
       ssl: true,
       useUnifiedTopology: true,
-      entities: ['dist/infrastructure/database/orm/*.js']
+      entities: ['dist/domain/entity/*.js']
     })
   }
 ]

@@ -1,7 +1,7 @@
 import { BankAccount } from "./bank.account";
-import { FinancialMovement } from "./financial.movement";
 import { Transaction } from "./transaction";
-
+import { Entity } from "typeorm";
+@Entity()
 export class SavingAccount extends BankAccount{
 
 

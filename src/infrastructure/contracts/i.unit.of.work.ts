@@ -8,9 +8,4 @@ export interface IUnitOfWork{
   currentAccountRepository: CurrentAccountRepository;
   savingAccountRepository: SavingAccountRepository;
 
-  start(): void;
-  complete(work: () => any): Promise<any>;
-  getConnection(): Connection;
-  closeConnection();
-
 }

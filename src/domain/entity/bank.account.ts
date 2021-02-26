@@ -1,19 +1,27 @@
 import { IFinancialService } from "../contracts/financial.services.interface";
 import { Transaction } from "./transaction";
 import { FinancialMovement } from "./financial.movement";
-import { ObjectID } from "typeorm";
+import { Column, Entity, ObjectID, ObjectIdColumn, PrimaryColumn } from "typeorm";
 
+@Entity()
 export abstract class BankAccount implements IFinancialService{
 
+  @ObjectIdColumn()
   public _id: ObjectID;
+  @Column()
   public number: string;
+  @Column()
   public balance: number;
+  @Column()
   public ownerId: string;
+  @Column()
   public city: string;
+  @Column()
   public movements: FinancialMovement[];
 
   constructor() {
     this.movements = []
+    this.balance = 0;
   }
 
   public consing(transaction: Transaction){

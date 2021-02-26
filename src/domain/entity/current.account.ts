@@ -1,12 +1,12 @@
 import { BankAccount } from "./bank.account";
 import { Transaction } from "./transaction";
+import { Entity } from "typeorm";
 
+@Entity()
 export class CurrentAccount extends BankAccount{
 
   private readonly _overdraft: number = -20000;
   private readonly _minimalFirstConsign: number = 100000;
-
-
 
   consing(transaction: Transaction) {
     if(this.validateFirstMovements() && transaction.value >= this._minimalFirstConsign)

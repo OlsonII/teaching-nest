@@ -11,7 +11,7 @@ export class RegisterSavingAccountService{
 
     try{
 
-      const accountSearched: BankAccount = await this.unitOfWork.savingAccountRepository.findEntity(request.number);
+      const accountSearched: BankAccount = await this.unitOfWork.savingAccountRepository.findOne({where: {number: request.number}});
 
       if(accountSearched == undefined){
         const newAccount: BankAccount = new SavingAccount();
@@ -20,14 +20,15 @@ export class RegisterSavingAccountService{
         newAccount.city = request.city;
         const firstTransaction: Transaction = new Transaction();
         firstTransaction.value = request.firstConsingValue;
+        firstTransaction.value = parseInt(request.firstConsingValue.toString());
+        firstTransaction.city = request.city;
         newAccount.consing(firstTransaction);
 
         if(newAccount.balance > 0){
-          await this.unitOfWork.start();
           const savedAccount = await this.unitOfWork.savingAccountRepository.save(newAccount);
 
           if(savedAccount != undefined)
-            return new RegisterSavingAccountResponse('Cuenta de ahorros numero' + savedAccount.number + 'ha sido creada satisfactoriamente');
+            return new RegisterSavingAccountResponse('Cuenta de ahorros numero ' + savedAccount.number + ' ha sido creada satisfactoriamente');
         }
 
         return new RegisterSavingAccountResponse('Consignacion inicial insuficiente. La consigancion inicial minima debe ser de $50.000 COP')
